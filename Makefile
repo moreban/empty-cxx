@@ -16,3 +16,5 @@ install_doc: install_min
 prepare:
 	rm -rf build
 	mkdir build
+
+clean: prepare
