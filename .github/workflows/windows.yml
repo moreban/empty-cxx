@@ -19,10 +19,12 @@ jobs:
         cmake -H"." -Bbuild -T host=x86 -A x64 -DCMAKE_BUILD_TYPE="Debug"
     - name: building
       run: |
-        cmake --build build --config Debug --target unit_tests -j4
+        # cmake --build build --config Debug --target unit_tests -j4
+        cmake --build build
     - name: testing
       run: |
-        cd build
-        cd tests
-        cd Debug
-        .\unit_tests.exe
+        # cd build
+        # cd tests
+        # cd Debug
+        # .\unit_tests.exe
+        cmake -E chdir build ctest

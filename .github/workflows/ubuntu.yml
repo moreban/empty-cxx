@@ -22,10 +22,12 @@ jobs:
         cmake -H. -Bbuild -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=On
     - name: building
       run: |
-        cmake --build build --config Debug --target coverage -j4
+        # cmake --build build --config Debug --target coverage -j4
+        cmake --build build
     - name: testing
       run: |
-        cd build
-        cd tests
-        ./unit_tests
-        bash <(curl -s https://codecov.io/bash)
+        # cd build
+        # cd tests
+        # ./unit_tests
+        # bash <(curl -s https://codecov.io/bash)
+        cmake -E chdir build ctest

@@ -19,9 +19,12 @@ jobs:
         cmake -H. -Bbuild -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug"
     - name: building
       run: |
-        cmake --build build --config Debug --target unit_tests -j4
+        # cmake --build build --config Debug --target unit_tests -j4
+        cmake --build build
+
     - name: testing
       run: |
-        cd build
-        cd tests
-        ./unit_tests
+        # cd build
+        # cd tests
+        # ./unit_tests
+        cmake -E chdir build ctest
