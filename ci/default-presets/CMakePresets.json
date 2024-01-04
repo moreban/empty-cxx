@@ -1,0 +1,63 @@
+{
+    "version": 6,
+    "configurePresets": [
+      {
+        "name": "debug",
+        "displayName": "Debug",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/debug",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug",
+          "CMAKE_CXX_FLAGS": "-DDEBUG=1 -g -O0"
+        }
+      },
+      {
+        "name": "release",
+        "displayName": "Release",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/release",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Release",
+          "CMAKE_CXX_FLAGS": "-DNDEBUG=1 -O3"
+        }
+      },
+      {
+        "name": "rel-with-dbg-info",
+        "displayName": "Release with debug information",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/relwithdbginfo",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+          "CMAKE_CXX_FLAGS": "-DNDEBUG=1 -DWITH_DEBUG_INFO -g -O1"
+        }
+      },
+      {
+        "name": "rel-with-min-size",
+        "displayName": "Release with minimal size",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/relwithminsize",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "MinSizeRel",
+          "CMAKE_CXX_FLAGS": "-DNDEBUG=1 -DWITH_MIN_SIZE -O0"
+        }
+      }
+    ],
+    "buildPresets": [
+        {
+            "name": "debug",
+            "configurePreset": "debug"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release"
+        },
+        {
+            "name": "rel-with-dbg-info",
+            "configurePreset": "rel-with-dbg-info"
+        },
+        {
+            "name": "rel-with-min-size",
+            "configurePreset": "rel-with-min-size"
+        }
+    ]
+}
