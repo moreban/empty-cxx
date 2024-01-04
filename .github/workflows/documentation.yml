@@ -3,7 +3,7 @@ name: Documentation
 on:
   push:
     tags:
-      - "v*"
+      - "*"
     branches: [ main, master ]
 
 jobs:
@@ -11,8 +11,12 @@ jobs:
     name: Build and publish documentation
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip' # caching pip dependencies
+    # - run: pip install -r requirements.txt
     - name: Install Docs
       run: |
         sudo apt-get install doxygen
@@ -22,13 +26,14 @@ jobs:
         make prepare
     - name: configure
       run: |
-        cmake -H. -Bbuild -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug"
+        cmake -H. -Bbuild -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug" -DBUILD_DOCUMENTATION=1
     - name: building
       run: |
-        cmake --build build --config Debug --target docs -j4
+        # cmake --build build --config Debug --target docs -j4
+        cmake --build build
     - name: Deploy to GitHub Pages
       uses: Cecilapp/GitHub-Pages-deploy@v3
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        build_dir: ./docs/html
+        build_dir: ./bin/doxygen/html
