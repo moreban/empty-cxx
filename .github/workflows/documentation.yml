@@ -3,7 +3,7 @@ name: Documentation
 on:
   push:
     tags:
-      - "*"
+      - "v*"
     branches: [ main, master ]
 
 jobs:
