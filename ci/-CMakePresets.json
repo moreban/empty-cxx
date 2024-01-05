@@ -22,7 +22,7 @@
             "value": "OFF"
           },
           "SECOND_CACHE_VARIABLE": "ON",
-          "CMAKE_MODULE_PATH": "",
+          "CMAKE_MODULE_PATH": ""
         },
         "environment": {
           "HZ": "Stay",

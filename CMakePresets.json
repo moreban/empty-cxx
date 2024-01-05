@@ -191,9 +191,9 @@
             "cacheVariables": {
                 "BUILD_TESTING": "ON",
                 "BUILD_DEMO_VIEWER": "OFF",
-                "DISABLE_OPTIMIZING": "ON"
-            },
-            // "toolchainFile": "vcpkg/scripts/buildsystems/vcpkg.cmake"
+                "DISABLE_OPTIMIZING": "ON",
+                "never-used-toolchainFile": "vcpkg/scripts/buildsystems/vcpkg.cmake"
+            }
         },
         {
             "name": "windows-ci",
