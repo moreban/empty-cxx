@@ -2,9 +2,9 @@ name: macOS CI Test
 
 on:
   push:
-    branches: [ main, master, dev ]
+    branches: [ "main", "master", "dev", "devel" ]
   pull_request:
-    branches: [ main, master, dev ]
+    branches: [ "main", "master", "dev", "devel" ]
 
 jobs:
   build:
