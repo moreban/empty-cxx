@@ -5,7 +5,14 @@
 
 name: CMake Build Matrix
 
-on: [push, pull_request]
+# on: [push, pull_request]
+on:
+  push:
+    tags:
+      - "v*"
+    branches: [ "main", "master", "dev", "devel" ]
+  pull_request:
+    branches: [ "main", "master", "dev", "devel" ]
 
 env:
   CMAKE_VERSION: 3.25.1

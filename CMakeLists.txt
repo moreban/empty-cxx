@@ -59,7 +59,7 @@ set_target_properties(${PRJ_OSN}
 
 if(BUILD_DOCUMENTATION)
   add_subdirectory(docs/)
-  attach_doxygen_to(${PRJ_OSN})
+  attach_doxygen_to(${PRJ_NAME})
 endif()
 
 
