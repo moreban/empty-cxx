@@ -11,7 +11,33 @@ set(PRJ_CXX_MNAME EMPTY_CXX)
 
 
 
-project(${PRJ_NAME})
+macro(safe_include cmakefilepath short_desc)
+	if(EXISTS ${CMAKE_SOURCE_DIR}/${cmakefilepath})
+		include(${CMAKE_SOURCE_DIR}/${cmakefilepath})
+		message(STATUS ">>> ${short_desc} found and loaded: ./${cmakefilepath}")
+	else()
+		message(STATUS ">>> ${short_desc} ignored")
+	endif()
+endmacro()
+
+# if (EXISTS ${CMAKE_SOURCE_DIR}/.version.cmake)
+# include(.version)
+# message(STATUS ">>> version decl file found: ${CMAKE_SOURCE_DIR}/.version.cmake (V${VERSION})")
+# #elseif (EXIST)
+# else ()
+# message(STATUS ">>> version decl file ignored")
+# set(VERSION 0.1.0.1)
+# endif ()
+set(VERSION 0.1.0.1)
+safe_include(.version.cmake "version declaration file")
+safe_include(.version.local.cmake "local version declaration file")
+set(PRJ_VERSION ${VERSION})
+
+
+project(${PRJ_NAME}
+		VERSION ${PRJ_VERSION}
+		DESCRIPTION "tests - test apps for cxx17 library"
+		LANGUAGES C CXX)
 include(CTest)
 
 option(BUILD_DOCUMENTATION "configure it for buildng documentation" OFF)
@@ -98,7 +124,7 @@ install(DIRECTORY include/${PRJ_CXX_NAME}
 set(CPACK_PACKAGE_VENDOR "Fintip Authors")
 set(CPACK_GENERATOR "DEB;RPM;TXZ")
 set(CPACK_THREADS 0)
-# set(CPACK_PACKAGE_NAME "my_project")
+set(CPACK_PACKAGE_NAME "${PRJ_OSN}")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Fintip Authors")
 # set(CPACK_PACKAGE_RELEASE 1)
 # set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
