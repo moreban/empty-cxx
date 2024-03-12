@@ -287,12 +287,29 @@ jobs:
       working-directory: instdir
       run: cmake -E tar cfv ../${{ matrix.config.artifact }} --format=7zip .
 
-
     - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         path: ./${{ matrix.config.artifact }}
         name: ${{ matrix.config.artifact }}
+
+
+    - name: CPack
+      if: runner.os == 'Linux'
+      run: |
+        cpack --config ./build/CPackConfig.cmake -B ./build
+
+    - name: Upload CPack Files
+      uses: actions/upload-artifact@v4
+      with:
+        name: pkgs
+        path: |
+          ./build/empty-cc-*.deb
+          ./build/empty-cc-*.rpm
+          ./build/empty-cc-*.tar.xz
+
+
+
 
   release:
     if: contains(github.ref, 'tags/v')
