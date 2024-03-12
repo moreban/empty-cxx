@@ -31,6 +31,11 @@ run_build() {
         ls -al --color "$TMP_INSTALL"/{s,}bin
 }
 
+run_doc() {
+    cmake -H. -Bbuild/docs -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Release" -DBUILD_DOCUMENTATION=1
+    cmake --build build/docs
+}
+
 run_cpack() {
     cpack --config build/CPackConfig.cmake -B ./build "$@"
 }

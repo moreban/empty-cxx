@@ -34,6 +34,9 @@ safe_include(.version.local.cmake "local version declaration file")
 set(PRJ_VERSION ${VERSION})
 
 
+
+
+
 project(${PRJ_NAME}
 		VERSION ${PRJ_VERSION}
 		DESCRIPTION "tests - test apps for cxx17 library"
@@ -59,7 +62,6 @@ set_target_properties(${PRJ_OSN}
 
 if(BUILD_DOCUMENTATION)
   add_subdirectory(docs/)
-  attach_doxygen_to(${PRJ_NAME})
 endif()
 
 

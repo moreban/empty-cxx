@@ -13,23 +13,37 @@ if(BUILD_DOCUMENTATION)
 	if(NOT DOXYGEN_FOUND)
 		message(FATAL_ERROR "Doxygen is needed to build the documentation.")
 	else()
-		message("running doxygen...")
+		message("preparing for doxygen build...")
 	endif()
 
+set(DOCS_SRC_DIR "${CMAKE_CURRENT_LIST_DIR}"   CACHE INTERNAL "DOCS_SRC_DIR")
+set(DOCS_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE INTERNAL "DOCS_BIN_DIR")
+message("    [doxygen] DOCS_SRC_DIR = ${DOCS_SRC_DIR}...")
+message("    [doxygen] DOCS_BIN_DIR = ${DOCS_BIN_DIR}...")
+
+macro(docs_from_lib source_lib_target)
 	# Find all the public headers
-	get_target_property(MY_PUBLIC_HEADER_DIR empty_cc INTERFACE_INCLUDE_DIRECTORIES)
+	get_target_property(MY_PUBLIC_HEADER_DIR ${source_lib_target} INTERFACE_INCLUDE_DIRECTORIES)
+
+	docs_from_dir(${MY_PUBLIC_HEADER_DIR})
+endmacro(docs_from_lib)
+
+macro(docs_from_dir source_dir)
+	set(MY_PUBLIC_HEADER_DIR "${source_dir}")
+
 	file(GLOB_RECURSE MY_PUBLIC_HEADERS ${MY_PUBLIC_HEADER_DIR}/*.hh)
 	# debug_print_list_value(MY_PUBLIC_HEADER_DIR)
 	# debug_print_value(PROJECT_SOURCE_DIR)
 
 	# set(DOXYGEN_INPUT_DIR ${PROJECT_SOURCE_DIR} )
-	set(DOXYGEN_INPUT_DIR ${PROJECT_SOURCE_DIR}/libs/empty-cxx)
+	set(DOXYGEN_INPUT_DIR ${PROJECT_SOURCE_DIR}/libs/${PRJ_CXX_NAME})
 
 	# set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs/doxygen)
-	set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../bin/doxygen)
+	set(DOXYGEN_OUTPUT_DIR ${DOCS_SRC_DIR}/../bin/doxygen)
 	set(DOXYGEN_INDEX_FILE ${DOXYGEN_OUTPUT_DIR}/html/index.html)
-	set(DOXYFILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/empty-cxx.in.doxygen)
-	set(DOXYFILE_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+	set(DOXYFILE_IN ${DOCS_SRC_DIR}/${PRJ_CXX_NAME}.in.doxygen)
+	set(DOXYFILE_OUT ${DOCS_BIN_DIR}/Doxyfile)
+	message("    [doxygen] DOCS_SRC_DIR = ${DOCS_SRC_DIR}...")
 
 	# Replace variables inside @@ with the current values
 	configure_file(${DOXYFILE_IN} ${DOXYFILE_OUT} @ONLY)
@@ -48,11 +62,17 @@ if(BUILD_DOCUMENTATION)
 
 	add_custom_target(Doxygen ALL DEPENDS ${DOXYGEN_INDEX_FILE})
 
-	# install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION     share/doc)
+	install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}/html DESTINATION share/doc)
+endmacro(docs_from_dir)
+
 endif()
 
 macro(attach_doxygen_to target)
-	if(CMAKE_BUILD_TYPE MATCHES "^[Rr]elease")
-		add_dependencies(${target} docs)
+	if(BUILD_DOCUMENTATION AND CMAKE_BUILD_TYPE MATCHES "^[Rr]elease")
+		add_dependencies(${target} Doxygen)
 	endif()
 endmacro()
+
+docs_from_dir(${CMAKE_SOURCE_DIR}/include/${PRJ_CXX_NAME})
+# docs_from_lib(${PRJ_OSN})
+attach_doxygen_to(${PRJ_OSN})
